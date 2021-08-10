@@ -1,13 +1,13 @@
-import SeamlessImmutable from 'seamless-immutable'
-import getIn from '../plain/getIn'
+import SeamlessImmutable from "seamless-immutable";
+import getIn from "../plain/getIn";
 
-const { static: Immutable } = SeamlessImmutable
+const { static: Immutable } = SeamlessImmutable;
 
 const structure = {
-  fromJS: value => Immutable.from(value),
+  fromJS: (value) => Immutable.from(value),
   getIn,
   merge: (state, payload) => Immutable.merge(state, payload),
-  toJS: value => Immutable.asMutable(value)
-}
+  toJS: (value) => Immutable.asMutable(value),
+};
 
-export default structure
+export default structure;

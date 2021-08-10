@@ -1,10 +1,10 @@
-import React from 'react'
-import { Route, Switch } from 'react-router'
-import Home from '../components/Home'
-import Hello from '../components/Hello'
-import Counter from '../components/Counter'
-import NoMatch from '../components/NoMatch'
-import NavBar from '../components/NavBar'
+import React from "react";
+import { Route, Switch } from "react-router";
+import Counter from "../components/Counter";
+import Hello from "../components/Hello";
+import Home from "../components/Home";
+import NavBar from "../components/NavBar";
+import NoMatch from "../components/NoMatch";
 
 const routes = (
   <div>
@@ -16,6 +16,6 @@ const routes = (
       <Route component={NoMatch} />
     </Switch>
   </div>
-)
+);
 
-export default routes
+export default routes;

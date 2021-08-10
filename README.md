@@ -2,12 +2,12 @@
 
 > v6.0.0 requires React v16.4.0 and React Redux v6.0 / v7.0.
 
-Connected React Router [![Build Status](https://travis-ci.org/supasate/connected-react-router.svg?branch=master)](https://travis-ci.org/supasate/connected-react-router) [![Open Source Helpers](https://www.codetriage.com/supasate/connected-react-router/badges/users.svg)](https://www.codetriage.com/supasate/connected-react-router)
-======================
+# Connected React Router [![Build Status](https://travis-ci.org/supasate/connected-react-router.svg?branch=master)](https://travis-ci.org/supasate/connected-react-router) [![Open Source Helpers](https://www.codetriage.com/supasate/connected-react-router/badges/users.svg)](https://www.codetriage.com/supasate/connected-react-router)
+
 A Redux binding for React Router v4 and v5
 
-Main features
--------------
+## Main features
+
 :sparkles: Synchronize router state with redux store through uni-directional flow (i.e. history -> store -> router -> components).
 
 :gift: Supports [React Router v4 and v5](https://github.com/ReactTraining/react-router).
@@ -24,11 +24,9 @@ Main features
 
 :muscle: Supports TypeScript
 
+## Installation
 
-Installation
------------
 Connected React Router requires **React 16.4 and React Redux 6.0 or later**.
-
 
     $ npm install --save connected-react-router
 
@@ -36,14 +34,16 @@ Or
 
     $ yarn add connected-react-router
 
-Usage
------
+## Usage
+
 ### Step 1
-In your root reducer file, 
+
+In your root reducer file,
+
 - Create a function that takes `history` as an argument and returns a root reducer.
-- Add `router` reducer into root reducer by passing `history` to `connectRouter`. 
+- Add `router` reducer into root reducer by passing `history` to `connectRouter`.
 - **Note: The key MUST be `router`**.
- 
+
 ```js
 // reducers.js
 import { combineReducers } from 'redux'
@@ -57,11 +57,12 @@ export default createRootReducer
 ```
 
 ### Step 2
+
 When creating a Redux store,
+
 - Create a `history` object.
 - Provide the created `history` to the root reducer creator.
 - Use `routerMiddleware(history)` if you want to dispatch history actions (e.g. to change URL with `push('/path/to/somewhere')`).
-
 
 ```js
 // configureStore.js
@@ -91,7 +92,7 @@ export default function configureStore(preloadedState) {
 
 ### Step 3
 
-- Wrap your react-router v4/v5 routing with `ConnectedRouter` and pass the `history` object as a prop.  Remember to delete any usage of `BrowserRouter` or `NativeRouter` as leaving this in will [cause](https://github.com/supasate/connected-react-router/issues/230#issuecomment-461628073) [problems](https://github.com/supasate/connected-react-router/issues/230#issuecomment-476164384) synchronising the state.
+- Wrap your react-router v4/v5 routing with `ConnectedRouter` and pass the `history` object as a prop. Remember to delete any usage of `BrowserRouter` or `NativeRouter` as leaving this in will [cause](https://github.com/supasate/connected-react-router/issues/230#issuecomment-461628073) [problems](https://github.com/supasate/connected-react-router/issues/230#issuecomment-476164384) synchronising the state.
 - Place `ConnectedRouter` as a child of `react-redux`'s `Provider`.
 - **N.B.** If doing server-side rendering, you should still use the `StaticRouter` from `react-router` on the server.
 
@@ -119,17 +120,17 @@ ReactDOM.render(
   document.getElementById('react-root')
 )
 ```
+
 Note: the `history` object provided to `router` reducer, `routerMiddleware`, and `ConnectedRouter` component must be the same `history` object.
 
 Now, it's ready to work!
 
+## Examples
 
-Examples
---------
 See the [examples](https://github.com/supasate/connected-react-router/tree/master/examples) folder
 
-[FAQ](https://github.com/supasate/connected-react-router/tree/master/FAQ.md)
------
+## [FAQ](https://github.com/supasate/connected-react-router/tree/master/FAQ.md)
+
 - [How to navigate with Redux action](https://github.com/supasate/connected-react-router/tree/master/FAQ.md#how-to-navigate-with-redux-action)
 - [How to get the current browser location (URL)](https://github.com/supasate/connected-react-router/tree/master/FAQ.md#how-to-get-the-current-browser-location-url)
 - [How to set Router props e.g. basename, initialEntries, etc.](https://github.com/supasate/connected-react-router/tree/master/FAQ.md#how-to-set-router-props-eg-basename-initialentries-etc)
@@ -141,18 +142,20 @@ See the [examples](https://github.com/supasate/connected-react-router/tree/maste
 - [How to use connected-react-router with react native](./FAQ.md#how-to-use-connected-react-router-with-react-native)
 - [How to use your own context with react-redux](https://github.com/supasate/connected-react-router/tree/master/FAQ.md#how-to-use-your-own-context-with-react-redux)
 
-Build
------
+## Build
+
 ```bash
 npm run build
 ```
+
 Generated files will be in the `lib` folder.
 
-Development
------------
+## Development
+
 When testing the example apps with `npm link` or `yarn link`, you should explicitly provide the same `Context` to both `Provider` and `ConnectedRouter` to make sure that the `ConnectedRouter` doesn't pick up a different `ReactReduxContext` from a different `node_modules` folder.
 
 In `index.js`.
+
 ```js
 ...
 import { Provider, ReactReduxContext } from 'react-redux'
@@ -164,6 +167,7 @@ import { Provider, ReactReduxContext } from 'react-redux'
 ```
 
 In `App.js`,
+
 ```js
 ...
 const App = ({ history, context }) => {
@@ -176,10 +180,10 @@ const App = ({ history, context }) => {
 ...
 ```
 
-Contributors
-------------
+## Contributors
+
 See [Contributors](https://github.com/supasate/connected-react-router/graphs/contributors) and [Acknowledge](https://github.com/supasate/connected-react-router/blob/master/ACKNOWLEDGE.md).
 
-License
--------
+## License
+
 [MIT License](https://github.com/supasate/connected-react-router/blob/master/LICENSE.md)

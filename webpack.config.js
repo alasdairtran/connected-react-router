@@ -1,21 +1,19 @@
 var config = {
-  entry: './src/index',
-  mode: 'production',
+  entry: "./src/index",
+  mode: "production",
   module: {
-    rules: [
-      { test: /\.js$/, use: [ 'babel-loader' ], exclude: /node_modules/ }
-    ]
+    rules: [{ test: /\.js$/, use: ["babel-loader"], exclude: /node_modules/ }],
   },
   output: {
-    library: 'ConnectedReactRouter',
-    libraryTarget: 'umd'
-  }
-}
+    library: "ConnectedReactRouter",
+    libraryTarget: "umd",
+  },
+};
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   config.optimization = {
-    minimize: true
-  }
+    minimize: true,
+  };
 }
 
-module.exports = config
+module.exports = config;

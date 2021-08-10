@@ -1,50 +1,55 @@
-import { matchPath } from "react-router"
+import { matchPath } from "react-router";
 
 const createSelectors = (structure) => {
-  const { getIn, toJS } = structure
+  const { getIn, toJS } = structure;
 
-  const isRouter = (value) => value != null &&
-    typeof value === 'object' &&
-    getIn(value, ['location']) &&
-    getIn(value, ['action'])
+  const isRouter = (value) =>
+    value != null &&
+    typeof value === "object" &&
+    getIn(value, ["location"]) &&
+    getIn(value, ["action"]);
 
-  const getRouter = state => {
-    const router = toJS(getIn(state, ['router']))
-    if (!isRouter(router)) { throw 'Could not find router reducer in state tree, it must be mounted under "router"' }
-    return router
-  }
-  const getLocation = state => toJS(getIn(getRouter(state), ['location']))
-  const getAction = state => toJS(getIn(getRouter(state), ['action']))
-  const getSearch = state => toJS(getIn(getRouter(state), ['location', 'search']))
-  const getHash = state => toJS(getIn(getRouter(state), ['location', 'hash']))
+  const getRouter = (state) => {
+    const router = toJS(getIn(state, ["router"]));
+    if (!isRouter(router)) {
+      throw 'Could not find router reducer in state tree, it must be mounted under "router"';
+    }
+    return router;
+  };
+  const getLocation = (state) => toJS(getIn(getRouter(state), ["location"]));
+  const getAction = (state) => toJS(getIn(getRouter(state), ["action"]));
+  const getSearch = (state) =>
+    toJS(getIn(getRouter(state), ["location", "search"]));
+  const getHash = (state) =>
+    toJS(getIn(getRouter(state), ["location", "hash"]));
 
   // It only makes sense to recalculate the `matchPath` whenever the pathname
   // of the location changes. That's why `createMatchSelector` memoizes
   // the latest result based on the location's pathname.
-  const createMatchSelector = path => {
-    let lastPathname = null
-    let lastMatch = null
+  const createMatchSelector = (path) => {
+    let lastPathname = null;
+    let lastMatch = null;
 
-    return state => {
-      const { pathname } = getLocation(state) || {}
+    return (state) => {
+      const { pathname } = getLocation(state) || {};
       if (pathname === lastPathname) {
-        return lastMatch
+        return lastMatch;
       }
-      lastPathname = pathname
-      const match = matchPath(pathname, path)
+      lastPathname = pathname;
+      const match = matchPath(pathname, path);
       if (
-        !match
-        || !lastMatch
-        || match.url !== lastMatch.url
+        !match ||
+        !lastMatch ||
+        match.url !== lastMatch.url ||
         // When URL matched for nested routes, URL is the same but isExact is not.
-        || match.isExact !== lastMatch.isExact
+        match.isExact !== lastMatch.isExact
       ) {
-        lastMatch = match
+        lastMatch = match;
       }
 
-      return lastMatch
-    }
-  }
+      return lastMatch;
+    };
+  };
 
   return {
     getLocation,
@@ -53,7 +58,7 @@ const createSelectors = (structure) => {
     getSearch,
     getHash,
     createMatchSelector,
-  }
-}
+  };
+};
 
-export default createSelectors
+export default createSelectors;

@@ -1,5 +1,7 @@
 # Frequently Asked Questions
-----------------------------
+
+---
+
 - [How to navigate with Redux action](#how-to-navigate-with-redux-action)
 - [How to get the current browser location (URL)](#how-to-get-the-current-browser-location-url)
 - [How to set Router props e.g. basename, initialEntries, etc.](#how-to-set-router-props-eg-basename-initialentries-etc)
@@ -11,139 +13,144 @@
 - [How to use your own context with react-redux](#how-to-use-your-own-context-with-react-redux)
 
 ### How to navigate with Redux action
-#### with store.dispatch
-```js
-import { push } from 'connected-react-router'
 
-store.dispatch(push('/path/to/somewhere'))
+#### with store.dispatch
+
+```js
+import { push } from "connected-react-router";
+
+store.dispatch(push("/path/to/somewhere"));
 ```
 
 #### with react-redux
+
 ```js
-import { push } from 'connected-react-router'
+import { push } from "connected-react-router";
 
 // in component render:
-<div onClick={() => {
-
-  /** do something before redirection */
-  props.push('/home');
-
-}}>login</div>
+<div
+  onClick={() => {
+    /** do something before redirection */
+    props.push("/home");
+  }}
+>
+  login
+</div>;
 
 // connect the action:
 export default connect(null, { push })(Component);
 ```
 
 #### in redux thunk
+
 ```js
-import { push } from 'connected-react-router'
+import { push } from "connected-react-router";
 
 export const login = (username, password) => (dispatch) => {
-
   /* do something before redirection */
 
-  dispatch(push('/home'))
-}
-
+  dispatch(push("/home"));
+};
 ```
+
 #### in redux saga
+
 ```js
-import { push } from 'connected-react-router'
-import { put, call } from 'redux-saga/effects'
+import { push } from "connected-react-router";
+import { put, call } from "redux-saga/effects";
 
 export function* login(username, password) {
-
   /* do something before redirection */
 
-  yield put(push('/home'))
+  yield put(push("/home"));
 }
 ```
 
 ### How to get the current browser location (URL)
+
 The current browser location can be accessed directly from the router state with `react-redux`'s `connect`.
 The location object is comprised of pathname, search (query string), and hash.
+
 ```js
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 const Child = ({ pathname, search, hash }) => (
   <div>
     Child receives
-    <div>
-      pathname: {pathname}
-    </div>
-    <div>
-      search: {search}
-    </div>
-    <div>
-      hash: {hash}
-    </div>
+    <div>pathname: {pathname}</div>
+    <div>search: {search}</div>
+    <div>hash: {hash}</div>
   </div>
-)
+);
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   pathname: state.router.location.pathname,
   search: state.router.location.search,
   hash: state.router.location.hash,
-})
+});
 
-export default connect(mapStateToProps)(Child)
+export default connect(mapStateToProps)(Child);
 ```
 
 ### How to set Router props (e.g. basename, initialEntries, etc.)
+
 You can pass props to the `create*History` functions of your choice (`createBrowserHistory`, `createHashHistory`, `createMemoryHistory`)
 
 ```js
-import { createBrowserHistory } from 'history'
+import { createBrowserHistory } from "history";
 
 const history = createBrowserHistory({
-  basename: '/prefix/',
-})
+  basename: "/prefix/",
+});
 ```
 
 ```js
-import { createHashHistory } from 'history'
+import { createHashHistory } from "history";
 
 const history = createHashHistory({
-  hashType: 'slash',
-  getUserConfirmation: (message, callback) => callback(window.confirm(message))
-})
+  hashType: "slash",
+  getUserConfirmation: (message, callback) => callback(window.confirm(message)),
+});
 ```
 
 ```js
-import { createMemoryHistory } from 'history'
+import { createMemoryHistory } from "history";
 
 const history = createMemoryHistory({
-  initialEntries: [ '/one', '/two', { pathname: '/three' } ],
-  initialIndex: 1
-})
+  initialEntries: ["/one", "/two", { pathname: "/three" }],
+  initialIndex: 1,
+});
 ```
 
 ### How to hot reload functional components
-1) Save the main app component in its own file.
+
+1. Save the main app component in its own file.
 
 `App.js`
-``` js
-import React from 'react'
-import { Route, Switch } from 'react-router' /* react-router v4/v5 */
-import { ConnectedRouter } from 'connected-react-router'
 
-const App = ({ history }) => ( /* receive history object via props */
+```js
+import React from "react";
+import { Route, Switch } from "react-router"; /* react-router v4/v5 */
+import { ConnectedRouter } from "connected-react-router";
+
+const App = ({ history } /* receive history object via props */) => (
   <ConnectedRouter history={history}>
     <div>
       <Switch>
-        <Route exact path="/" render={() => (<div>Match</div>)} />
-        <Route render={() => (<div>Miss</div>)} />
+        <Route exact path="/" render={() => <div>Match</div>} />
+        <Route render={() => <div>Miss</div>} />
       </Switch>
     </div>
   </ConnectedRouter>
-)
+);
 
-export default App
+export default App;
 ```
 
-2) Wrap the `App` component with `AppContainer` from `react-hot-loader` v3 as a top-level container.
+2. Wrap the `App` component with `AppContainer` from `react-hot-loader` v3 as a top-level container.
 
 `index.js`
+
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -165,10 +172,11 @@ const render = () => { // this function will be reused
 render()
 ```
 
-3) Detect change and re-render with hot reload.
+3. Detect change and re-render with hot reload.
 
 `index.js`
-``` js
+
+```js
 ...
 if (module.hot) {
   module.hot.accept('./App', () => {
@@ -187,13 +195,16 @@ if (module.hot) {
   })
 }
 ```
+
 Now, when you change any component that `App` depends on, it will trigger hot reloading without losing redux state. Thanks [react-hot-loader v3](https://github.com/gaearon/react-hot-loader/tree/next)!
 
 ### How to hot reload reducers
+
 Detect change and replace with a new root reducer with router state
 
 `index.js`
-``` js
+
+```js
 ...
 if (module.hot) {
   module.hot.accept('./reducers', () => {
@@ -214,9 +225,11 @@ if (module.hot) {
 ```
 
 ### How to support Immutable.js
-1) Create your root reducer as a function that takes `history` and returns reducer. Use `combineReducers` from `redux-immutable` to return the root reducer.
 
-2) Import `connectRouter` from `connected-react-router/immutable` and add router reducer to root reducer
+1. Create your root reducer as a function that takes `history` and returns reducer. Use `combineReducers` from `redux-immutable` to return the root reducer.
+
+2. Import `connectRouter` from `connected-react-router/immutable` and add router reducer to root reducer
+
 ```js
 import { combineReducers } from 'redux-immutable'
 import { connectRouter } from 'connected-react-router/immutable'
@@ -228,12 +241,17 @@ const rootReducer = (history) => combineReducers({
 ...
 ```
 
-2) Import `ConnectedRouter` and `routerMiddleware` from `connected-react-router/immutable` instead of `connected-react-router`.
+2. Import `ConnectedRouter` and `routerMiddleware` from `connected-react-router/immutable` instead of `connected-react-router`.
+
 ```js
-import { ConnectedRouter, routerMiddleware } from 'connected-react-router/immutable'
+import {
+  ConnectedRouter,
+  routerMiddleware,
+} from "connected-react-router/immutable";
 ```
 
-3) Create your root reducer with router reducer by passing `history` to `rootReducer` function
+3. Create your root reducer with router reducer by passing `history` to `rootReducer` function
+
 ```js
 const store = createStore(
   rootReducer(history),
@@ -242,7 +260,8 @@ const store = createStore(
 )
 ```
 
-4) (Optional) Initialize state with `Immutable.Map()`
+4. (Optional) Initialize state with `Immutable.Map()`
+
 ```js
 import Immutable from 'immutable'
 ...
@@ -256,7 +275,9 @@ const store = createStore(
 ```
 
 ### How to migrate from v4 to v5/v6
+
 It's easy to migrate from v4 to v5/v6.
+
 1. In your root reducer file, instead of exporting a root reducer, you need to export a function accepting a `history` object and returning a root reducer with `router` key. The value of the `router` key is `connectedRouter(history)`.
 
 ```diff
@@ -273,6 +294,7 @@ It's easy to migrate from v4 to v5/v6.
 ```
 
 2. In `createStore` function, change to use the new function creating a root reducer.
+
 ```diff
   // configureStore.js
   ...
@@ -298,6 +320,7 @@ It's easy to migrate from v4 to v5/v6.
 ```
 
 3. For reducers hot reloading, similarly, change to use the new function creating a root reducer.
+
 ```diff
   // For Webpack 2.x
 - store.replaceReducer(connectRouter(history)(rootReducer))
@@ -311,13 +334,15 @@ It's easy to migrate from v4 to v5/v6.
 ```
 
 ### How to use connected-react-router with react native
+
 #### History does not exist, how can I configure my redux store?
+
 As you know react native does not support natively the HTML5 history API, it's supposed to be available only for web browsers. This issue can be solved by using [`createMemoryHistory`](https://github.com/ReactTraining/history/blob/master/docs/GettingStarted.md#intro).
 
 Here is an example with react-redux v6.0.0.
 
 ```js
-const history = createMemoryHistory()
+const history = createMemoryHistory();
 
 ReactDOM.render(
   <Provider store={store}>
@@ -325,25 +350,29 @@ ReactDOM.render(
       <Route path="/" component={myComponent} exact={true} />
     </ConnectedRouter>
   </Provider>
-)
+);
 ```
 
 [Example available here](./examples/react-native/src/configureStore.js)
 
 #### Get location from a screen
+
 You can access at your location interface with `history.location`.
 
 [Example available here](./examples/react-native/src/screens/Account.js)
 
 #### Go to a screen with parameter
+
 You can use `history` and navigate between screens.
 
 [Example available here](./examples/react-native/src/screens/Home.js)
 
 ### How to Use Your Own Context with react-redux
+
 With react-redux v6.0.0, you can pass your own context to `<Provider>` component. So, you need to pass the same context as props to `<ConnectedRouter>` component.
+
 ```js
-const customContext = React.createContext(null) // your own context
+const customContext = React.createContext(null); // your own context
 
 ReactDOM.render(
   <Provider store={store} context={customContext}>
@@ -351,11 +380,13 @@ ReactDOM.render(
       ...
     </ConnectedRouter>
   </Provider>
-)
+);
 ```
 
 ### How to stop initial location change
+
 In order to make this package more compatible with react-router-redux, a LOCATION_CHANGE action is dispatched for the initial location. This can however be disabled via the `noInitialPop` prop.
+
 ```js
 ReactDOM.render(
   <Provider store={store}>
@@ -363,5 +394,5 @@ ReactDOM.render(
       <Route path="/" component={myComponent} exact={true} />
     </ConnectedRouter>
   </Provider>
-)
+);
 ```
