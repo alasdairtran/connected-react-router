@@ -8,6 +8,10 @@ import createSelectors from "./selectors";
 
 const createConnectedRouter = (structure) => {
   const { getLocation } = createSelectors(structure);
+  const ConnectedReactRouter = connect(({ router: { location, action } }) => ({
+    location,
+    action,
+  }))(Router);
   /*
    * ConnectedRouter listens to a history object passed from props.
    * When history is changed, it dispatches action to redux store.
@@ -68,8 +72,7 @@ const createConnectedRouter = (structure) => {
       });
 
       const handleLocationChange = (
-        location,
-        action,
+        { location, action },
         isFirstRendering = false
       ) => {
         // Dispatch onLocationChanged except when we're in time travelling
@@ -87,7 +90,13 @@ const createConnectedRouter = (structure) => {
         // Dispatch a location change action for the initial location.
         // This makes it backward-compatible with react-router-redux.
         // But, we add `isFirstRendering` to `true` to prevent double-rendering.
-        handleLocationChange(history.location, history.action, true);
+        handleLocationChange(
+          {
+            location: history.location,
+            action: history.action,
+          },
+          true
+        );
       }
     }
 
@@ -107,7 +116,11 @@ const createConnectedRouter = (structure) => {
         return <>{children}</>;
       }
 
-      return <Router history={history}>{children}</Router>;
+      return (
+        <ConnectedReactRouter navigator={history}>
+          {children}
+        </ConnectedReactRouter>
+      );
     }
   }
 
